@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+.DS_Store
+Thumbs.db
