@@ -6,7 +6,7 @@
 [![Database](https://img.shields.io/badge/database-SQLite%20WAL%20%2B%20Parquet-orange.svg)](https://sqlite.org/wal.html)
 [![Dashboard](https://img.shields.io/badge/dashboard-Streamlit-red.svg)](https://streamlit.io/)
 [![Excel](https://img.shields.io/badge/excel-Live%20Formulas%20OpenPyXL-brightgreen.svg)](https://openpyxl.readthedocs.io/)
-[![Tests](https://img.shields.io/badge/pytest-28%20passed%20%7C%20100%25-success.svg)](https://docs.pytest.org/)
+[![Tests](https://img.shields.io/badge/pytest-30%20passed%20%7C%20100%25-success.svg)](https://docs.pytest.org/)
 
 > **Sistema Empresarial de Planificación de Demanda, Abastecimiento y S&OP para Cadenas de Supermercados y Alimentos Importados (+50 Tiendas)**  
 > *Inspirado en la operación logística y comercial en Chile (estilo KiosClub American Supermarket) con catálogo internacional de confitería, snacks, bebidas y abarrotes de EE.UU.*
