@@ -65,3 +65,43 @@ def test_zero_variance_lead_time():
 
     expected_sigma_ddlt = np.sqrt(l_weeks) * s_std
     assert policy.sigma_ddlt == pytest.approx(expected_sigma_ddlt, 0.05)
+
+
+def test_engine_instance_compute_policy_and_catalog():
+    """Valida la invocación mediante la interfaz BaseInventoryEngine y el cálculo masivo de catálogo."""
+    engine = StochasticReplenishmentEngine()
+    sales = pd.Series([200, 220, 190, 210])
+    policy = engine.compute_policy(
+        sku="TEST-INST",
+        weekly_demand=sales,
+        lead_time_days_mean=42.0,
+        lead_time_days_std=5.0,
+        abc_class="A"
+    )
+    assert policy.sku == "TEST-INST"
+    assert policy.safety_stock_units > 0
+
+    # Test catalog policies
+    df_products = pd.DataFrame([
+        {
+            "sku": "SKU-CAT-1",
+            "supplier_lead_time_days": 50.0,
+            "lead_time_std_days": 6.0,
+            "abc_category": "A"
+        },
+        {
+            "sku": "SKU-CAT-2",
+            "supplier_lead_time_days": 60.0,
+            "lead_time_std_days": 8.0,
+            "abc_category": "B"
+        }
+    ])
+    df_sales = pd.DataFrame([
+        {"sku": "SKU-CAT-1", "weekly_units": 150.0},
+        {"sku": "SKU-CAT-1", "weekly_units": 160.0},
+    ])
+    # SKU-CAT-2 has no sales in df_sales, will trigger fallback
+    df_policies = StochasticReplenishmentEngine.compute_catalog_policies(df_sales, df_products)
+    assert len(df_policies) == 2
+    assert "safety_stock_units" in df_policies.columns
+

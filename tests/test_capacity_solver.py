@@ -106,3 +106,28 @@ def test_scenario_evaluator():
     assert len(df_scenarios) == 5
     assert "Sin Restricciones" in df_scenarios.iloc[0]["scenario_name"]
     assert "Caja Restringida" in df_scenarios.iloc[1]["scenario_name"]
+
+
+def test_capacity_solver_pallet_constraint_bottleneck():
+    """Valida que cuando el cuello de botella son los pallets y no el dinero, se acote por pallets."""
+    df_demands = pd.DataFrame([{
+        "sku": "SKU-BULKY",
+        "unconstrained_order_units": 1000,
+        "cogs_clp": 100.0,
+        "units_per_pallet": 100,  # 10 pallets needed
+        "gross_margin_pct": 0.50,
+        "annual_turnover": 5.0,
+        "abc_class": "A"
+    }])
+
+    # Budget $1,000,000 (enough for 10,000 units), but max pallets = 2.0 (only 200 units fit)
+    df_res, summary = SnOpCapacityOptimizer.optimize(
+        df_demands=df_demands,
+        max_budget_clp=1000000.0,
+        max_pallet_capacity=2.0
+    )
+    # Units should be capped to 200 (or rounded multiple of 12)
+    assert summary.total_constrained_pallets <= 2.0
+    assert summary.total_constrained_units <= 200
+    assert summary.warehouse_pallet_utilization_pct <= 100.0
+

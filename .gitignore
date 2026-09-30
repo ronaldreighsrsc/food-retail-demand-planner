@@ -8,5 +8,8 @@ htmlcov/
 *.sqlite-journal
 *.sqlite-wal
 *.sqlite-shm
+*.db-wal
+*.db-shm
 .DS_Store
 Thumbs.db
+

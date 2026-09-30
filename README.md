@@ -1,11 +1,12 @@
 # 🥑 KIOS-FLOW: Multi-Echelon Demand Forecasting, Import Replenishment & Shelf-Life Risk Engine
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/architecture-Clean%20DDD-green.svg)](https://martinfowler.com/tags/domain%20driven%20design.html)
 [![Database](https://img.shields.io/badge/database-SQLite%20WAL%20%2B%20Parquet-orange.svg)](https://sqlite.org/wal.html)
 [![Dashboard](https://img.shields.io/badge/dashboard-Streamlit-red.svg)](https://streamlit.io/)
 [![Excel](https://img.shields.io/badge/excel-Live%20Formulas%20OpenPyXL-brightgreen.svg)](https://openpyxl.readthedocs.io/)
-[![Tests](https://img.shields.io/badge/pytest-26%20passed%20%7C%20100%25-success.svg)](https://docs.pytest.org/)
+[![Tests](https://img.shields.io/badge/pytest-28%20passed%20%7C%20100%25-success.svg)](https://docs.pytest.org/)
 
 > **Sistema Empresarial de Planificación de Demanda, Abastecimiento y S&OP para Cadenas de Supermercados y Alimentos Importados (+50 Tiendas)**  
 > *Inspirado en la operación logística y comercial en Chile (estilo KiosClub American Supermarket) con catálogo internacional de confitería, snacks, bebidas y abarrotes de EE.UU.*
@@ -262,11 +263,12 @@ El sistema cuenta con una cobertura integral de pruebas unitarias y de integraci
 pytest -v tests/
 ```
 
-### Resultados de la Suite (26 de 26 Pruebas Superadas):
+### Resultados de la Suite (28 de 28 Pruebas Superadas):
 ```
 tests/test_capacity_solver.py::test_capacity_solver_unconstrained_fit PASSED
 tests/test_capacity_solver.py::test_capacity_solver_budget_constraint_prioritization PASSED
 tests/test_capacity_solver.py::test_scenario_evaluator PASSED
+tests/test_capacity_solver.py::test_capacity_solver_pallet_constraint_bottleneck PASSED
 tests/test_data_and_pipeline_coverage.py::test_data_generator_components PASSED
 tests/test_data_and_pipeline_coverage.py::test_models_methods PASSED
 tests/test_data_and_pipeline_coverage.py::test_parquet_and_read_table PASSED
@@ -288,10 +290,11 @@ tests/test_net_requirements.py::test_net_requirements_no_purchase_when_overstock
 tests/test_safety_stock.py::test_stochastic_safety_stock_calculation PASSED
 tests/test_safety_stock.py::test_abc_service_levels PASSED
 tests/test_safety_stock.py::test_zero_variance_lead_time PASSED
+tests/test_safety_stock.py::test_engine_instance_compute_policy_and_catalog PASSED
 tests/test_shelf_life.py::test_shelf_life_critical_waste PASSED
 tests/test_shelf_life.py::test_shelf_life_healthy_batch PASSED
 
-============================= 26 passed in 2.64s ==============================
+============================= 28 passed in 3.12s ==============================
 ```
 
 ---
@@ -304,10 +307,9 @@ Para incorporar este proyecto en tu currículum vitae (`cv_ronald_solares.tex`) 
 \textbf{\href{https://github.com/ronaldreighsrsc/food-retail-demand-planner}{Planificación de Demanda, Abastecimiento y S\&OP Food Retail}} \hfill Python, SQL, OpenPyXL, Streamlit
 \textit{Modelación Estocástica de Inventarios, Pronóstico Jerárquico y Gestión de Caducidad}
 \begin{itemize}[noitemsep, topsep=2pt, partopsep=0pt, parsep=0pt]
-    \item \textbf{Pronóstico y Auditoría S\&OP:} Modelé series temporales jerárquicas a nivel SKU-tienda (+50 sucursales) incorporando estacionalidad y aperturas; automaticé auditorías de precisión con WAPE, MAPE, Bias y Tracking Signal para mitigar sobre-pronósticos.
-    \item \textbf{Abastecimiento Estocástico de Importación:} Diseñé el motor de Stock de Seguridad ($SS$) y Punto de Reorden ($ROP$) bajo variabilidad combinada de demanda y lead times marítimos internacionales (45--75 días, EE.UU.--Chile), elevando el \textit{In-Stock Rate} al 96.5\%.
-    \item \textbf{Caducidad FEFO y Simulación Restringida:} Implementé monitoreo preventivo de vida útil (\textit{Shelf-Life}) para erradicar mermas por vencimiento, y un optimizador S\&OP de compras restringido por Capital de Trabajo y pallets en CD maximizando el GMROI.
-    \item \textbf{Automatización y Excel Avanzado:} Construí un generador de modelos en Excel con fórmulas encadenadas vivas (\textit{XLOOKUP}, \textit{SUMIFS}, validaciones), sincronizado con SQLite (WAL) y un portal analítico en Streamlit con 100\% de cobertura en Pytest.
+    \item \textbf{Pronóstico Jerárquico y Auditoría S\&OP:} Modelé series temporales a nivel SKU-tienda (+50 sucursales) con elasticidad promocional y aperturas; automaticé auditorías con WAPE, Bias y Tracking Signal para neutralizar sobre-pronósticos de compras.
+    \item \textbf{Abastecimiento Estocástico de Importación:} Diseñé el motor de Stock de Seguridad ($SS$) y Reorden ($ROP$) bajo variabilidad combinada de demanda y lead times transoceánicos (45--75 días, EE.UU.), elevando el \textit{In-Stock Rate} al 96.4\%.
+    \item \textbf{Caducidad FEFO y Simulación Restringida:} Implementé alertas preventivas de vida útil (\textit{Shelf-Life}) para mitigar mermas, y un optimizador S\&OP por GMROI enlazado a modelos en Excel con fórmulas vivas y dashboard en Streamlit (28 tests).
 \end{itemize}
 ```
 
