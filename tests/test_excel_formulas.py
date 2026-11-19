@@ -4,6 +4,7 @@ Verifies live formula syntax and workbook structure with openpyxl.
 """
 import os
 import openpyxl
+import pandas as pd
 import pytest
 from src.reporting.excel_snop_builder import CorporateSnOpExcelBuilder
 
@@ -60,3 +61,55 @@ def test_excel_snop_builder_structure_and_formulas(tmp_path):
     max_r = ws1.max_row
     total_val = str(ws1.cell(row=max_r, column=15).value)
     assert total_val.startswith("=SUM(")
+
+
+def test_excel_forecast_audit_sheet_formulas(tmp_path):
+    """Valida la presencia de fórmulas dinámicas en la pestaña de Auditoría de Forecast."""
+    out_file = str(tmp_path / "test_audit_model.xlsx")
+    df_audit = pd.DataFrame([{
+        "sku": "FOD-SNK-01",
+        "category": "Snacks",
+        "total_actual_units": 500.0,
+        "total_forecast_units": 550.0,
+        "tracking_signal": 1.2,
+        "bias_diagnosis": "Balanceado"
+    }])
+    CorporateSnOpExcelBuilder.build_snop_workbook(filepath=out_file, df_forecast_audit=df_audit)
+
+    wb = openpyxl.load_workbook(out_file, data_only=False)
+    ws2 = wb["Auditoria_Forecast"]
+
+    row2_abs_error = str(ws2["E2"].value)
+    assert row2_abs_error.startswith("=")
+    assert "ABS" in row2_abs_error
+
+    row2_wape = str(ws2["F2"].value)
+    assert row2_wape.startswith("=")
+    assert "ROUND" in row2_wape
+
+
+def test_excel_fefo_sheet_formulas(tmp_path):
+    """Valida la presencia de fórmulas de riesgo financiero en la pestaña FEFO."""
+    out_file = str(tmp_path / "test_fefo_model.xlsx")
+    df_fefo = pd.DataFrame([{
+        "batch_id": "BTC-100",
+        "sku": "FOD-BEV-01",
+        "product_name": "Dr Pepper Cherry",
+        "units_in_batch": 1000,
+        "expiry_date": "2026-11-15",
+        "days_to_expire": 45,
+        "projected_demand_before_expiry": 600,
+        "projected_waste_units": 400,
+        "financial_waste_risk_clp": 800000.0,
+        "urgency_tier": "ALERTA",
+        "action_recommendation": "Despachar a Providencia"
+    }])
+    CorporateSnOpExcelBuilder.build_snop_workbook(filepath=out_file, df_fefo_risk=df_fefo)
+
+    wb = openpyxl.load_workbook(out_file, data_only=False)
+    ws3 = wb["Monitor_Caducidad_FEFO"]
+
+    # Fila 2 columna J es Riesgo Financiero: =H2*I2
+    row2_risk = str(ws3["J2"].value)
+    assert row2_risk.startswith("=")
+    assert "H2*I2" in row2_risk
